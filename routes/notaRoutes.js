@@ -26,7 +26,7 @@ router.put('/edit', async (req, res)=>{
     }
     try {
         await Notas.updateOne({id: id},notas)             
-        res.status(201).json({mesage: "atualizadocom sucesso", id})       
+        res.status(201)       
     } catch (error) {
         res.json({message:error})
     }
@@ -37,7 +37,7 @@ router.delete('/del', async (req, res)=>{
     
     try {
         await Notas.deleteOne({id: id})             
-        res.status(201).json({mesage: "Apagada"})  
+        res.status(201)  
         
     } catch (error) {
         res.json({message:error})

@@ -30,9 +30,9 @@ router.post('/', async(req, res)=>{
     
     try{
         await Usuario.create(usuario)
-        res.status(201).json({mesage: "pessoa inserida"})
-    }catch(error){
-        res.status(500).json({ error: error})
+        res.status(201)
+    }catch{
+        res.status(500)
     }
 })
 
@@ -43,13 +43,13 @@ router.post('/login', async (req, res)=>{
     const user = await Usuario.findOne({email: email})
 
     if (!user) {
-        return res.status(404).json({message:"usuario nao encontrado"})
+        return res.status(404)
     }
 
     const checkPassword = await bcrypt.compare(senha, user.senha)
 
     if (!checkPassword) {
-        return res.status(422).json({message:"Senha errada"})
+        return res.status(422)
     }
     
     try {
@@ -64,26 +64,14 @@ router.post('/login', async (req, res)=>{
         secret,)
         
 
-        res.status(200).json({message:"Atuticaçao com sucesso", nome, email ,token, id})
+        res.status(200).json({nome, email ,token, id})
 
 
-    } catch (error) {        
-        console.log(error)
-        res.status(500).json({message:"Houve um erro" , secret})  
+    } catch (error) {       
+        res.status(500) 
     }
 
 
 })
-
-router.get('/', async (req, res)=>{
-    try{
-        const people = await Usuario.find()
-        res.status(200).json(people)
-    }catch(e){
-        res.status(500).json({error:e})
-    }
-})
-
-
 
 module.exports = router
