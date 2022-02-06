@@ -43,6 +43,7 @@ router.delete('/del', async (req, res)=>{
         res.json({message:error})
     }
 })
+
 router.get('/sync/:IdUser', async (req, res)=>{  
     let IdUser = req.params.IdUser
     try{
