@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken')
 
 router.post('/', async(req, res)=>{
 
-    const {name, email, password, confirmpassword } = req.body     
+    const {name, email, password, confirmpassword } = req.body  
     
     const validateEmail = /\S+@\S+\.\S+/
     const validateUser = await Users.findOne({email: email})
@@ -54,7 +54,6 @@ router.post('/', async(req, res)=>{
 router.post('/login', async (req, res)=>{
 
     const {email, password} = req.body
-    
     const user = await Users.findOne({email: email})
 
     if (!user) {
