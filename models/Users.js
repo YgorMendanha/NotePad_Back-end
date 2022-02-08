@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
-const Usuario = mongoose.model('Usuario',{
-    nome:{
+const Users = mongoose.model('Users',{
+    name:{
         type:String,
         required: true
     },
@@ -10,10 +10,10 @@ const Usuario = mongoose.model('Usuario',{
         unique: true,
         lowercase:true
     },
-    senha:{
+    password:{
         type:String,
         required:true,  
     }    
 })
 
-module.exports = Usuario
+module.exports = Users

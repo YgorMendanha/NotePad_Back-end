@@ -9,7 +9,7 @@ require("dotenv").config();
 
 //Cors
 app.use(cors({
-    origin:['https://app-notepad.herokuapp.com','http://localhost:3000']
+    origin:['https://app-notepad.herokuapp.com']
 })) 
 
 //Conf bodyParser
@@ -25,13 +25,13 @@ app.use(cors({
 //
 
 // Rotas   
-const usuarioRoutes = require('./routes/usuarioRoutes')
-    app.use('/usuario', usuarioRoutes)
-const notasRoutes = require('./routes/notaRoutes')
-    app.use('/notas', notasRoutes)
+const userRoutes = require('./routes/userRoutes')
+    app.use('/user', userRoutes)
+const noteRoutes = require('./routes/noteRoutes')
+    app.use('/notes', noteRoutes)
 
 
-const PORT = process.env.PORT || 8080;
+const PORT =  8080;
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:8080/`);
 });

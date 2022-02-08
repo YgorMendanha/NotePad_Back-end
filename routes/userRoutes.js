@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const Usuario = require('../models/Usuarios')
+const Users = require('../models/Users')
 const nodemailer = require('nodemailer')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -7,30 +7,28 @@ const jwt = require('jsonwebtoken')
 
 router.post('/', async(req, res)=>{
 
-    const {nome, email, senha , confirmarsenha } = req.body 
+    const {name, email, password, confirmpassword } = req.body     
     
-
     const validateEmail = /\S+@\S+\.\S+/
-    const user = await Usuario.findOne({email: email})
+    const validateUser = await Users.findOne({email: email})
 
     let erros = []
 
-    if(nome === ""|| nome === null || nome.length <=2 ){
+    if(name === ""|| name === null || name.length <=2 || name === undefined){
         erros.push({error: "Digite um Nome valido"})       
         
     }
     if(validateEmail.test(email) === false){        
-        erros.push({error: "Email Invalido"})
-        
+        erros.push({error: "Email Invalido"})        
     } 
-    if(user){        
+    if(validateUser){        
         erros.push({error: "Email Indisponivel"})
     }   
-    if(senha.length <= 5 ){
+    if(password.length <= 5 ){
         erros.push({error: "Senha Muito Pequena"})       
         
     }
-    if(senha != confirmarsenha ){        
+    if(password != confirmpassword ){        
         erros.push({error: "Senhas Diferentes!"})
     }
     if(erros.length > 0){
@@ -38,15 +36,15 @@ router.post('/', async(req, res)=>{
     }
     
     const salt = await bcrypt.genSalt(12)
-    const senhaHash = await bcrypt.hash(senha, salt)
-    const usuario ={
-        nome,
+    const passwordHash = await bcrypt.hash(password, salt)
+    const user ={
+        name,
         email,
-        senha:senhaHash,        
+        password:passwordHash,        
     }
     
     try{
-        await Usuario.create(usuario)
+        await Users.create(user)
         res.json({message:"Usuario Criado Com Sucesso"}).status(201)
     }catch{
         res.json({erros:"Houve um Error ao Criar Seu Usuario!"}).status(500)
@@ -55,22 +53,22 @@ router.post('/', async(req, res)=>{
 
 router.post('/login', async (req, res)=>{
 
-    const {email, senha} = req.body
-
-    const user = await Usuario.findOne({email: email})
+    const {email, password} = req.body
+    
+    const user = await Users.findOne({email: email})
 
     if (!user) {
         return res.json("Email ou Senha Incorretos").status(404)
     }
 
-    const checkPassword = await bcrypt.compare(senha, user.senha)
+    const checkPassword = await bcrypt.compare(password, user.password)
 
     if (!checkPassword) {
         return res.json("Email ou Senha Incorretos").status(422)
     }
     
     try {
-        let nome = user.nome
+        let name = user.name
         let email = user.email
         let id = user._id        
         let secret = process.env.SECRET
@@ -81,7 +79,7 @@ router.post('/login', async (req, res)=>{
         secret,)
         
 
-        res.status(200).json({nome, email ,token, id})
+        res.status(200).json({name, email ,token, id})
 
 
     } catch (error) {       
@@ -94,12 +92,11 @@ router.post('/login', async (req, res)=>{
 
 router.post('/restorepassword', async (req, res)=>{
     const {email} = req.body
-    const user = await Usuario.findOne({email: email})  
-    console.log(user)  
+    const user = await Users.findOne({email: email})
     let transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false, // upgrade later with STARTTLS   
+        host: process.env.HOST,
+        port: process.env.PORT,
+        secure: false,  
         auth: {
           user: process.env.USER,
           pass: process.env.PASS,
@@ -109,7 +106,7 @@ router.post('/restorepassword', async (req, res)=>{
             to: user.email,
             subject: "Email para Recuperar Senha do NoteApp!",
             text: "Email com o link para Recuperar Senha do NoteApp!",
-            html: `<h1>Olá,${user.nome}, tudo certo?</h1><p>Voce não lembra da sua senha?</p><p><br><br></p><p>Clique no Link para escolher outra!</p><p><a href="https://app-notepad.herokuapp.com/restorepassword/${user._id}">Clique Aqui!</a> <br><br><br><br><br></p><p>Até mais tarde!</p>`
+            html: `<h1>Olá,${user.name}, tudo certo?</h1><p>Voce não lembra da sua senha?</p><p><br><br></p><p>Clique no Link para escolher outra!</p><p><a href="https://app-notepad.herokuapp.com/restorepassword/${user._id}">Clique Aqui!</a> <br><br><br><br><br></p><p>Até mais tarde!</p>`
           };
         transporter.sendMail(message, (e) => {
             if(e){  
@@ -124,13 +121,13 @@ router.put('/restorepassword/:IdUser', async (req, res)=>{
     try{
         let erros = []
         let IdUser = req.params.IdUser
-        const {novasenha, confirmarsenha} = req.body 
+        const {newpassword, confirmpassword} = req.body 
        
-        if(novasenha != confirmarsenha ){ 
+        if(newpassword != confirmpassword ){ 
                   
             erros.push({error: "Senhas Diferentes!"})
         }        
-        if(novasenha.length <= 5 ){            
+        if(newpassword.length <= 5 ){            
             erros.push({error: "Senha Muito Pequena"})
         }
         if(erros.length > 0){      
@@ -140,12 +137,12 @@ router.put('/restorepassword/:IdUser', async (req, res)=>{
         else{ 
                       
             const salt = await bcrypt.genSalt(12)
-            const senhaHash = await bcrypt.hash(novasenha, salt)
-            const Senha = {        
-                senha: senhaHash                
+            const passwordHash = await bcrypt.hash(newpassword, salt)
+            const Password = {        
+                password: passwordHash                
             }
             try {
-            await Usuario.updateOne({id: IdUser},Senha)             
+            await Users.updateOne({id: IdUser},Password)             
             res.json({message:'Senha Atualizada!'}).status(201)       
         } catch(e){            
             res.json({message:'Houve um Error ao atualizar sua Senha!'})
@@ -175,16 +172,16 @@ router.put('/update/:IdUser', checkToken, async (req, res)=>{
     try{
         let erros = []
         let IdUser = req.params.IdUser
-        const {senha, novasenha, confirmarsenha} = req.body     
-        const user = await Usuario.findOne({id: IdUser})
-        const checkPassword = await bcrypt.compare(senha, user.senha)
+        const {password, newpassword, confirmpassword} = req.body     
+        const user = await Users.findOne({id: IdUser})
+        const checkPassword = await bcrypt.compare(password, user.password)
         if(checkPassword === false ){
             erros.push({error:'Senha Incorreta!'})
         }        
-        if(novasenha != confirmarsenha ){        
+        if(newpassword != confirmpassword ){        
             erros.push({error: "Senhas Diferentes!"})
         }        
-        if(novasenha.length <= 5 ){            
+        if(newpassword.length <= 5 ){            
             erros.push({error: "Senha Muito Pequena"})
         }
         if(erros.length > 0){            
@@ -192,12 +189,12 @@ router.put('/update/:IdUser', checkToken, async (req, res)=>{
         }
         else{            
             const salt = await bcrypt.genSalt(12)
-            const senhaHash = await bcrypt.hash(novasenha, salt)
-            const Senha = {        
-                senha: senhaHash                
+            const passwordHash = await bcrypt.hash(newpassword, salt)
+            const Password = {        
+                password: passwordHash                
             }
             try {
-            await Usuario.updateOne({id: IdUser},Senha)             
+            await Users.updateOne({id: IdUser},Password)             
             res.json({message:'Senha Atualizada!'}).status(201)       
         } catch{
             res.json({message:'Houve um Error ao atualizar sua Senha!'})

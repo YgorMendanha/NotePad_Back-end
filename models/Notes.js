@@ -1,15 +1,15 @@
 const mongoose = require('mongoose')
-const Notas = mongoose.model('Notas',{  
+const Notes = mongoose.model('Notes',{  
     userid:{
         type:String,
     },
-    titulo:{
+    title:{
         type:String,
         required: true
     },
-    nota:{
+    note:{
         type:String,       
     }
 })
 
-module.exports = Notas
+module.exports = Notes
