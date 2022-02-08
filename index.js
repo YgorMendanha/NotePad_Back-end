@@ -31,7 +31,7 @@ const noteRoutes = require('./routes/noteRoutes')
     app.use('/notes', noteRoutes)
 
 
-const PORT =  8080;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:8080/`);
+  console.log(`Servidor rodando em http://localhost:${PORT}/`);
 });

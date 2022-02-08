@@ -94,7 +94,7 @@ router.post('/restorepassword', async (req, res)=>{
     const user = await Users.findOne({email: email})
     let transporter = nodemailer.createTransport({
         host: process.env.HOST,
-        port: process.env.PORT,
+        port: process.env.PORTe,
         secure: false,  
         auth: {
           user: process.env.USER,
