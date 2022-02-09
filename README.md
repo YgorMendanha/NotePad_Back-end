@@ -109,8 +109,24 @@ As seguintes ferramentas foram usadas na construção do projeto:
 
 <br>
 
-<a href="https://www.instagram.com/_oygorguimaraes/"> <img src="/img/instagram.ico"  alt="instagram" width=40 height=auto></a>
-<a href="https://www.linkedin.com/in/ygormendanha/"> <img src="/img/linkedin.ico" alt="linkedin" width=40 height=auto> </a> <a href="https://twitter.com/oTalDoPatolino"> <img src="/img/tw.ico"  alt="twitter" width=40 height=auto></a>
+
+<p align="center">
+    <a href=https://www.linkedin.com/in/ygormendanha/>
+        <img alt="linkedin" src="https://img.shields.io/badge/linkedin-%230077B5.svg?&style=for-the-badge&logo=linkedin&logoColor=white&link=mailto:https://www.linkedin.com/in/ygormendanha/">
+    </a>
+  &nbsp;
+  <a href="https://www.instagram.com/_oygorguimaraes/">
+        <img alt="instagram" src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white">
+    </a>
+  &nbsp;
+    <a href="https://twitter.com/oTalDoPatolino">
+    <img alt="twitter" src="https://img.shields.io/twitter/follow/oTalDoPatolino?color=1DA1F2&logo=twitter&style=for-the-badge&label=twitter" />
+  </a>
+  &nbsp;
+    <a href="https://github.com/YgorMendanha">
+    <img alt="github" src="https://img.shields.io/github/followers/YgorMendanha?color=181717&logo=github&style=for-the-badge&label=github" />
+  </a>
+</p>
 
 
 
