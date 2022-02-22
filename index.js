@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require('mongoose')
-const db = require('./config/db.js')
+const db = require('./src/config/db.js')
 
 const app = express();
 require("dotenv").config();
@@ -25,9 +25,9 @@ app.use(cors({
 //
 
 // Rotas   
-const userRoutes = require('./routes/userRoutes')
+const userRoutes = require('./src/routes/userRoutes')
     app.use('/user', userRoutes)
-const noteRoutes = require('./routes/noteRoutes')
+const noteRoutes = require('./src/routes/noteRoutes')
     app.use('/notes', noteRoutes)
 
 
