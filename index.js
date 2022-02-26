@@ -1,37 +1,39 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
+const express = require('express')
+const bodyParser = require('body-parser')
+const cors = require('cors')
 const mongoose = require('mongoose')
 const db = require('./src/config/db.js')
 
-const app = express();
-require("dotenv").config();
+const app = express()
+require('dotenv').config()
 
-//Cors
-app.use(cors({
-    origin:['https://app-notepad.herokuapp.com']
-})) 
+// Cors
+app.use(
+	cors({
+		origin: ['https://app-notepad.herokuapp.com'],
+	})
+)
 
-//Conf bodyParser
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: true }));
-//Mongoose
-    mongoose.connect(db.mongoURI).then(() =>{
-        console.log("Conectado ao Mongo!")
-    }).catch((e) =>{
-        console.log("Erro ao se conectar" + e)
-    })
+// Conf bodyParser
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+// Mongoose
+mongoose
+	.connect(db.mongoURI)
+	.then(() => {
+		console.log('Conectado ao Mongo!')
+	})
+	.catch(e => {
+		console.log('Erro ao se conectar' + e)
+	})
 
-//
-
-// Rotas   
+// Rotas
 const userRoutes = require('./src/routes/userRoutes')
-    app.use('/user', userRoutes)
+app.use('/user', userRoutes)
 const noteRoutes = require('./src/routes/noteRoutes')
-    app.use('/notes', noteRoutes)
+app.use('/notes', noteRoutes)
 
-
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8080
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}/`);
-});
+	console.log(`Servidor rodando em http://localhost:${PORT}/`)
+})
